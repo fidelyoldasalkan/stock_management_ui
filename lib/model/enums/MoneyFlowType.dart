@@ -1,0 +1,3 @@
+enum MoneyFlowType {
+  DEPOSIT, WITHDRAW
+}
