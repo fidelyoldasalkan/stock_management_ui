@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stock_management_ui/model/Account.dart';
 
 class SharedPref {
 
@@ -48,5 +49,35 @@ class SharedPref {
       _sharedPreferences = await SharedPreferences.getInstance();
     }
     return _sharedPreferences!.getString("password");
+  }
+
+  void saveDefaultAccount(Account account) async {
+    if (_sharedPreferences == null) {
+      _sharedPreferences = await SharedPreferences.getInstance();
+    }
+    _sharedPreferences!.setString("defaultAccountName", account.name!);
+    _sharedPreferences!.setInt("defaultAccountId", account.id!);
+    _sharedPreferences!.setDouble("defaultAccountCommission", account.commissionRate!);
+  }
+
+  Future<String?> loadDefaultAccountName() async{
+    if (_sharedPreferences == null) {
+      _sharedPreferences = await SharedPreferences.getInstance();
+    }
+    return _sharedPreferences!.getString("defaultAccountName");
+  }
+
+  Future<int?> loadDefaultAccountId() async {
+    if (_sharedPreferences == null) {
+      _sharedPreferences = await SharedPreferences.getInstance();
+    }
+    return _sharedPreferences!.getInt("defaultAccountId");
+  }
+
+  Future<double?> loadDefaultCommission() async {
+    if (_sharedPreferences == null) {
+      _sharedPreferences = await SharedPreferences.getInstance();
+    }
+    return _sharedPreferences!.getDouble("defaultAccountCommission");
   }
 }

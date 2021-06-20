@@ -5,6 +5,7 @@ import 'package:stock_management_ui/model/Account.dart';
 import 'package:stock_management_ui/model/Corporation.dart';
 import 'package:stock_management_ui/service/AccountService.dart';
 import 'package:stock_management_ui/service/CorporationService.dart';
+import 'package:stock_management_ui/util/SharedPref.dart';
 import 'package:stock_management_ui/widget/HomePage.dart';
 
 class AccountCreatePage extends StatefulWidget {
@@ -24,6 +25,7 @@ class _AccountCreatePageState extends State<AccountCreatePage> {
   final _commissionController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
   late BuildContext _buildContext;
+  final _sharedPref = SharedPref.getInstance();
 
   Account account = Account();
   String pageTitle;
@@ -150,6 +152,18 @@ class _AccountCreatePageState extends State<AccountCreatePage> {
                       },
                     ),
                   ),
+                  Padding(padding: EdgeInsets.all(8), 
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Varsayın Hesap Olarak Belirle", style: TextStyle(fontSize: 24, color: Colors.blueGrey),),
+                      Switch.adaptive(value: account.isDefault!, onChanged: (value) {
+                        setState(() {
+                          account.isDefault = !account.isDefault!;
+                        });
+                      } ),
+                    ],
+                  ),),
                   SizedBox(
                     height: 50,
                   ),
@@ -164,6 +178,7 @@ class _AccountCreatePageState extends State<AccountCreatePage> {
 
                       formKey.currentState!.save();
 
+                      _sharedPref.saveDefaultAccount(account);
                       AccountService.save(context, account.toJson(), onSuccess: onSuccess, onError: onError);
                     },
                   ),

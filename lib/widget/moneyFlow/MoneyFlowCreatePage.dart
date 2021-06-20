@@ -9,6 +9,7 @@ import 'package:stock_management_ui/model/enums/MoneyFlowType.dart';
 import 'package:stock_management_ui/service/AccountService.dart';
 import 'package:stock_management_ui/service/MoneyFlowService.dart';
 import 'package:stock_management_ui/util/DateUtil.dart';
+import 'package:stock_management_ui/util/SharedPref.dart';
 
 import '../HomePage.dart';
 
@@ -21,11 +22,17 @@ class MoneyFlowCreatePage extends StatefulWidget {
 class _MoneyFlowCreatePageState extends State<MoneyFlowCreatePage> {
   final _accountController = TextEditingController();
   final _dateController = TextEditingController();
+  final _sharedPref = SharedPref.getInstance();
 
   final GlobalKey<FormState> formKey = GlobalKey();
   late BuildContext _buildContext;
 
   MoneyFlow moneyFlow = MoneyFlow();
+
+  _MoneyFlowCreatePageState() {
+    initAccount();
+    initDate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,5 +229,23 @@ class _MoneyFlowCreatePageState extends State<MoneyFlowCreatePage> {
     moneyFlow.date = DateUtil.apiDate(newDate);
     _dateController.text = DateUtil.ddMmYy(newDate);
 
+  }
+
+  void initAccount() async {
+    String? accountName = await _sharedPref.loadDefaultAccountName();
+    int? accountId = await _sharedPref.loadDefaultAccountId();
+
+    if (accountName != null && accountId != 0) {
+      setState(() {
+        _accountController.text = accountName;
+        moneyFlow.accountId = accountId;
+      });
+    }
+  }
+
+  void initDate() {
+    final now = DateTime.now();
+    _dateController.text = DateUtil.ddMmYy(now);
+    moneyFlow.date = DateUtil.apiDate(now);
   }
 }

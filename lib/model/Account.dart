@@ -7,6 +7,7 @@ class Account extends BaseModel {
   String? corporationName;
   double? amount;
   List<dynamic>? transactionList;
+  bool? isDefault;
 
   Account(
       [int id = 0,
@@ -15,14 +16,16 @@ class Account extends BaseModel {
       this.commissionRate = 0.0,
       this.corporationName,
       this.amount,
-      this.transactionList])
+      this.transactionList,
+      this.isDefault = false])
       : super(id);
 
   Map<String, dynamic> toJson() => {
         "id": "$id",
         "name": name,
         "corporationId": "$corporationId",
-        "commissionRate": "$commissionRate"
+        "commissionRate": "$commissionRate",
+        "isDefault": isDefault
       };
 
   static Account fromJson(Map<String, dynamic> json) {
@@ -33,6 +36,7 @@ class Account extends BaseModel {
         json['commissionRate'],
         json['corporationName'],
         json['amount'],
-        json['transactionList']);
+        json['transactionList'],
+        json['isDefault']);
   }
 }

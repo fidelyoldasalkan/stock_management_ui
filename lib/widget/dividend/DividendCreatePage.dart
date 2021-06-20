@@ -10,6 +10,7 @@ import 'package:stock_management_ui/service/AccountService.dart';
 import 'package:stock_management_ui/service/DividendService.dart';
 import 'package:stock_management_ui/service/StockService.dart';
 import 'package:stock_management_ui/util/DateUtil.dart';
+import 'package:stock_management_ui/util/SharedPref.dart';
 
 import '../HomePage.dart';
 
@@ -19,13 +20,19 @@ class DividendCreatePage extends StatefulWidget {
 }
 
 class _DividendCreatePageState extends State<DividendCreatePage> {
-  final accountController = TextEditingController();
-  final stockController = TextEditingController();
+  final _accountController = TextEditingController();
+  final _stockController = TextEditingController();
   final _dateController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
   late BuildContext _buildContext;
+  final _sharedPref = SharedPref.getInstance();
 
   Dividend dividend = Dividend();
+
+  _DividendCreatePageState() {
+    initAccount();
+    initDate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +87,7 @@ class _DividendCreatePageState extends State<DividendCreatePage> {
                       hideSuggestionsOnKeyboardHide: false,
                       debounceDuration: Duration(milliseconds: 500),
                       textFieldConfiguration: TextFieldConfiguration(
-                        controller: accountController,
+                        controller: _accountController,
                         decoration: InputDecoration(
                           labelText: "Hesap",
                           prefixIcon: Icon(Icons.account_balance_outlined),
@@ -94,7 +101,7 @@ class _DividendCreatePageState extends State<DividendCreatePage> {
                         );
                       },
                       onSuggestionSelected: (suggestion) {
-                        accountController.text = suggestion!.name!;
+                        _accountController.text = suggestion!.name!;
                         dividend.accountId = suggestion.id;
                       },
                       noItemsFoundBuilder: (context) {
@@ -123,7 +130,7 @@ class _DividendCreatePageState extends State<DividendCreatePage> {
                       hideSuggestionsOnKeyboardHide: false,
                       debounceDuration: Duration(milliseconds: 500),
                       textFieldConfiguration: TextFieldConfiguration(
-                        controller: stockController,
+                        controller: _stockController,
                         decoration: InputDecoration(
                           labelText: "Hisse",
                           prefixIcon: Icon(Icons.account_balance_outlined),
@@ -137,7 +144,7 @@ class _DividendCreatePageState extends State<DividendCreatePage> {
                         );
                       },
                       onSuggestionSelected: (suggestion) {
-                        stockController.text = suggestion!.shortCode!;
+                        _stockController.text = suggestion!.shortCode!;
                         dividend.stock = suggestion.shortCode;
                       },
                       noItemsFoundBuilder: (context) {
@@ -272,4 +279,21 @@ class _DividendCreatePageState extends State<DividendCreatePage> {
 
   }
 
+  void initAccount() async {
+    String? accountName = await _sharedPref.loadDefaultAccountName();
+    int? accountId = await _sharedPref.loadDefaultAccountId();
+
+    if (accountName != null && accountId != 0) {
+      setState(() {
+        _accountController.text = accountName;
+        dividend.accountId = accountId;
+      });
+    }
+  }
+
+  void initDate() {
+    final now = DateTime.now();
+    _dateController.text = DateUtil.ddMmYy(now);
+    dividend.date = DateUtil.apiDate(now);
+  }
 }

@@ -37,7 +37,6 @@ abstract class AbstractListPageState<T extends BaseModel> extends State {
 
   Future<List<T>> fetchData() async {
     final generalResponse = await MyDio(_buildContext).get(apiUri(), onSuccess: onSuccess, onError: onError);
-    // var jsonData = await HttpUtil.get(apiUri(), onSuccess, onError);
 
     List<T> list = [];
     for (var json in generalResponse.data) {

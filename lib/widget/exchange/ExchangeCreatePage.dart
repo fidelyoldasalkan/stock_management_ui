@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -9,6 +11,7 @@ import 'package:stock_management_ui/service/AccountService.dart';
 import 'package:stock_management_ui/service/ExchangeService.dart';
 import 'package:stock_management_ui/service/StockService.dart';
 import 'package:stock_management_ui/util/DateUtil.dart';
+import 'package:stock_management_ui/util/SharedPref.dart';
 
 import '../HomePage.dart';
 
@@ -24,11 +27,17 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
   final _dateController = TextEditingController();
   final _stockController = TextEditingController();
   final _commissionController = TextEditingController();
+  final _sharedPref = SharedPref.getInstance();
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   Exchange exchange = Exchange();
   late BuildContext _buildContext;
+
+  _ExchangeCreatePageState(){
+    initAccount();
+    initDate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -311,4 +320,25 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
   }
 
   void onError(GeneralResponse? generalResponse) {}
+
+
+  void initAccount() async {
+    String? accountName = await _sharedPref.loadDefaultAccountName();
+    int? accountId = await _sharedPref.loadDefaultAccountId();
+    double? commission = await _sharedPref.loadDefaultCommission();
+
+    if (accountName != null && accountId != 0 && commission != null) {
+      setState(() {
+        _accountController.text = accountName;
+        exchange.accountId = accountId;
+        _commissionController.text = "$commission";
+      });
+    }
+  }
+
+  void initDate() {
+    final now = DateTime.now();
+    _dateController.text = DateUtil.ddMmYy(now);
+    exchange.date = DateUtil.apiDate(now);
+  }
 }
