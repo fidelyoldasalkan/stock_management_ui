@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:stock_management_ui/constant/ServicePath.dart';
 import 'package:stock_management_ui/model/MoneyFlow.dart';
-import 'package:stock_management_ui/widget/AbstractCard.dart';
+import 'package:stock_management_ui/widget/abstract/AbstractCard.dart';
+
+import 'MoneyFlowListPage.dart';
 
 class MoneyFlowCard extends AbstractCard<MoneyFlow> {
   MoneyFlowCard() : super('Nakit Akışı', ServicePath.MONEY_FLOW_LIST);
 
   @override
   MoneyFlow mapper(json) {
-    return MoneyFlow(json['id'], json['accountId'],
-        json['moneyFlowType'], json['amount'], json['date']);
+    return MoneyFlow.fromJson(json);
   }
 
   @override
@@ -50,5 +51,10 @@ class MoneyFlowCard extends AbstractCard<MoneyFlow> {
   @override
   Widget noFoundDataWidget() {
     return Text("Nakit akışı kaydınız bulunmamaktadır.");
+  }
+
+  @override
+  void onPressedCardTitleButton() {
+    Navigator.push(buildContext, MaterialPageRoute(builder: (context) => MoneyFlowListPage()));
   }
 }

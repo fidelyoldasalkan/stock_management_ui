@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:stock_management_ui/constant/ServicePath.dart';
 import 'package:stock_management_ui/model/Dividend.dart';
-import 'package:stock_management_ui/widget/AbstractCard.dart';
+import 'package:stock_management_ui/widget/abstract/AbstractCard.dart';
+
+import 'DividendListPage.dart';
 
 class DividendCard extends AbstractCard<Dividend> {
   DividendCard() : super("Temettü", ServicePath.DIVIDEND_LIST);
@@ -14,13 +17,7 @@ class DividendCard extends AbstractCard<Dividend> {
 
   @override
   Dividend mapper(json) {
-    return Dividend(
-        0,
-        json['accountId'],
-        json['date'],
-        json['stock'],
-        json['lot'],
-        json['amount']);
+    return Dividend.fromJson(json);
   }
 
   @override
@@ -36,5 +33,10 @@ class DividendCard extends AbstractCard<Dividend> {
   @override
   Widget rightWidget(Dividend data) {
     return Text("${data.lot! * data.amount!} ₺");
+  }
+
+  @override
+  void onPressedCardTitleButton() {
+    Navigator.push(buildContext, MaterialPageRoute(builder: (context) => DividendListPage()));
   }
 }

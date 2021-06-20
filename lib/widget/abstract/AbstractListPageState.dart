@@ -33,6 +33,8 @@ abstract class AbstractListPageState<T extends BaseModel> extends State {
 
   Future? delete(int id);
 
+  void edit(T data);
+
   Future<List<T>> fetchData() async {
     final generalResponse = await MyDio(_buildContext).get(apiUri(), onSuccess: onSuccess, onError: onError);
     // var jsonData = await HttpUtil.get(apiUri(), onSuccess, onError);
@@ -93,13 +95,18 @@ abstract class AbstractListPageState<T extends BaseModel> extends State {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
                       child: Card(
                         child: Slidable(
                           actionPane: SlidableDrawerActionPane(),
                           secondaryActions: [
+                            IconSlideAction(
+                              caption: 'Düzenle',
+                              color: Colors.blue,
+                              icon: Icons.edit,
+                              onTap: () {
+                                edit(snapshot.data![index]);
+                              },
+                            ),
                             IconSlideAction(
                               caption: 'Sil',
                               color: Colors.redAccent,
@@ -109,8 +116,16 @@ abstract class AbstractListPageState<T extends BaseModel> extends State {
                               },
                             )
                           ],
-                          child: Row(
-                            children: row(snapshot.data![index]),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border(right: BorderSide(
+                                color: Colors.blue,
+                                width: 2
+                              ))
+                            ),
+                            child: Row(
+                              children: row(snapshot.data![index]),
+                            ),
                           ),
                         ),
                       ),

@@ -8,14 +8,12 @@ import 'package:stock_management_ui/widget/abstract/AbstractListPageState.dart';
 import 'ExchangeCreatePage.dart';
 
 class ExchangeListPage extends StatefulWidget {
-
   @override
   _ExchangeListPageState createState() => _ExchangeListPageState();
 }
 
 class _ExchangeListPageState extends AbstractListPageState<Exchange> {
-
-  _ExchangeListPageState() : super("İşlemlerin", "Yeni İşlem");
+  _ExchangeListPageState() : super("İşlemlerim", "Yeni İşlem");
 
   @override
   String apiUri() {
@@ -62,6 +60,20 @@ class _ExchangeListPageState extends AbstractListPageState<Exchange> {
   List<Widget> row(data) {
     return [
       Expanded(
+        flex: 1,
+        child: Center(
+          child: data.exchangeType == 'BUY'
+              ? Icon(
+                  Icons.compare_arrows_outlined,
+                  color: Colors.green,
+                )
+              : Icon(
+                  Icons.compare_arrows_outlined,
+                  color: Colors.red,
+                ),
+        ),
+      ),
+      Expanded(
         flex: 4,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
@@ -77,18 +89,20 @@ class _ExchangeListPageState extends AbstractListPageState<Exchange> {
         ),
       ),
       Expanded(
+        flex: 1,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:  [
-              Text("Tutar ${data.lot! * data.price!}"),
-              Text("Komisyon ${data.commission!}"),
-            ]
-          ),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text("Tutar ${data.lot! * data.price!}"),
+            Text("Komisyon ${data.commission!}"),
+          ]),
         ),
       ),
     ];
   }
 
+  @override
+  void edit(Exchange data) {
+    // TODO: implement edit
+  }
 }

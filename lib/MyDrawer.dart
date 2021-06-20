@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:stock_management_ui/util/MyDio.dart';
-import 'package:stock_management_ui/widget/account/AccountListPage3.dart';
-import 'package:stock_management_ui/widget/dividend/DividendListPage2.dart';
-import 'package:stock_management_ui/widget/moneyFlow/MoneyFlowListPage2.dart';
+import 'package:stock_management_ui/widget/account/AccountListPage.dart';
+import 'package:stock_management_ui/widget/dividend/DividendListPage.dart';
 import 'package:stock_management_ui/widget/exchange/ExchangeListPage.dart';
+import 'package:stock_management_ui/widget/moneyFlow/MoneyFlowListPage.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -28,21 +27,21 @@ class MyDrawer extends StatelessWidget {
             leading: Icon(Icons.message),
             title: Text('Hesaplarım'),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => AccountListPage3()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AccountListPage()));
             },
           ),
           ListTile(
             leading: Icon(Icons.attach_money_rounded),
             title: Text('Nakit Akışı'),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MoneyFlowListPage2()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MoneyFlowListPage()));
             },
           ),
           ListTile(
             leading: Icon(Icons.attach_money_rounded),
             title: Text('Temettü'),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DividendListPage2()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => DividendListPage()));
             },
           ),
           ListTile(
@@ -55,7 +54,6 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.message),
             title: Text('Create Account'),
-            onTap: () => MyDio(context).get("/account/list"),
           ),
           ListTile(
             leading: Icon(Icons.account_circle),

@@ -6,6 +6,9 @@ class ServicePath {
   static final String ACCOUNT_SAVE = "/account/save";
 
   // ignore: non_constant_identifier_names
+  static final String ACCOUNT_DETAIL = "/account/detail";
+
+  // ignore: non_constant_identifier_names
   static final String ACCOUNT_DELETE = "/account/delete";
 
   // ignore: non_constant_identifier_names

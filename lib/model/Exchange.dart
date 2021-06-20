@@ -7,9 +7,10 @@ class Exchange extends BaseModel {
   double? price;
   String? date;
   double? commission;
+  String? exchangeType;
 
   Exchange([int id= 0, this.accountId, this.stock, this.lot,
-      this.price, this.date, this.commission])
+      this.price, this.date, this.commission, this.exchangeType])
       : super(id);
 
   static Exchange fromJson(Map<String, dynamic> json) {
@@ -21,6 +22,7 @@ class Exchange extends BaseModel {
       json['price'],
       json['date'],
       json['commission'],
+      json['exchangeType']
     );
   }
 
@@ -32,7 +34,8 @@ class Exchange extends BaseModel {
       "stock": stock,
       "lot": lot,
       "price": price,
-      "commission": commission
+      "commission": commission,
+      "exchangeType": exchangeType
     };
   }
 }

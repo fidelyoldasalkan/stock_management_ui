@@ -1,16 +1,19 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:stock_management_ui/constant/ServicePath.dart';
 import 'package:stock_management_ui/model/Account.dart';
-import 'package:stock_management_ui/widget/AbstractCard.dart';
+import 'package:stock_management_ui/widget/abstract/AbstractCard.dart';
+
+import 'AccountDetailPage.dart';
+import 'AccountListPage.dart';
 
 class AccountCard extends AbstractCard<Account> {
   AccountCard() : super("Hesaplar", ServicePath.ACCOUNT_LIST);
 
   @override
   Account mapper(json) {
-    return Account(json['id'], json['name'], json['corporationId'],
-        json['commissionRate']);
+    return Account.fromJson(json);
   }
 
   @override
@@ -25,11 +28,16 @@ class AccountCard extends AbstractCard<Account> {
 
   @override
   void onRowTap(Account data) {
-    // TODO: implement onRowTap
+    Navigator.push(buildContext, MaterialPageRoute(builder: (context) => AccountDetailPage(data)));
   }
 
   @override
   Widget noFoundDataWidget() {
     return Text("Tanımlı hesabınınz bulunmamaktadır. Lütfen Hesap oluşturunuz");
+  }
+
+  @override
+  void onPressedCardTitleButton() {
+    Navigator.push(buildContext, MaterialPageRoute(builder: (context) => AccountListPage()));
   }
 }

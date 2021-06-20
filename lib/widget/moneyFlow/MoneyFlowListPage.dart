@@ -8,8 +8,8 @@ import 'package:stock_management_ui/widget/abstract/AbstractListPageState.dart';
 
 import 'MoneyFlowCreatePage.dart';
 
-class MoneyFlowListPage2 extends StatefulWidget {
-  const MoneyFlowListPage2({Key? key}) : super(key: key);
+class MoneyFlowListPage extends StatefulWidget {
+  const MoneyFlowListPage({Key? key}) : super(key: key);
 
   @override
   _MoneyFlowListPageState createState() => _MoneyFlowListPageState();
@@ -94,5 +94,10 @@ class _MoneyFlowListPageState extends AbstractListPageState<MoneyFlow> {
         ),
       ),
     ];
+  }
+
+  @override
+  void edit(MoneyFlow data) {
+    // TODO: implement edit
   }
 }

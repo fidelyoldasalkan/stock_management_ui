@@ -6,12 +6,12 @@ abstract class AbstractCard<T extends BaseModel> extends StatelessWidget {
   final String title;
   final String url;
   bool isFirst = false;
-  late BuildContext _buildContext;
+  late BuildContext buildContext;
 
   AbstractCard(this.title, this.url);
 
   Future<List<T>> fetchData() async {
-    final generalResponse = await MyDio(_buildContext).get(url);
+    final generalResponse = await MyDio(buildContext).get(url);
 
     List<T> list = [];
     for (var json in generalResponse.data!) {
@@ -33,15 +33,14 @@ abstract class AbstractCard<T extends BaseModel> extends StatelessWidget {
 
   Widget noFoundDataWidget();
 
+  void onPressedCardTitleButton();
+
   @override
   Widget build(BuildContext context) {
-    _buildContext = context;
+    buildContext = context;
     return Container(
       margin: EdgeInsets.all(5),
       padding: EdgeInsets.all(2),
-      decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadiusDirectional.circular(10)),
       height: 200,
       alignment: Alignment.centerLeft,
       child: Card(
@@ -49,13 +48,17 @@ abstract class AbstractCard<T extends BaseModel> extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: ListView(children: [
             Container(
-              height: 40,
+              height: 50,
               padding: EdgeInsets.fromLTRB(10, 10, 0, 5),
               alignment: Alignment.topLeft,
               decoration: BoxDecoration(
-                  border:
-                      Border(bottom: BorderSide(color: Colors.blue, width: 2))),
-              child: Text(title),
+                  border: Border(bottom: BorderSide(color: Colors.blue, width: 2),),),
+              child: Row(
+                children: [
+                  Expanded(flex: 4, child: Text(title, style: TextStyle(color: Colors.blue, fontSize: 24),)),
+                  Expanded(flex: 1,child: IconButton(icon: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),onPressed: onPressedCardTitleButton)), //ElevatedButton.icon(icon: Icon(Icons.keyboard_arrow_right),onPressed: onPressedCardTitleButton, label: Text(""),))
+                ],
+              ),
             ),
             Container(
               height: 150,
@@ -64,7 +67,7 @@ abstract class AbstractCard<T extends BaseModel> extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isEmpty) {
-                      return noFoundDataWidget();
+                      return Center(child: noFoundDataWidget(),);
                     }
 
                     return ListView.builder(

@@ -24,4 +24,8 @@ class AccountService {
     return await MyDio(buildContext).post(ServicePath.ACCOUNT_SAVE, data, onSuccess: onSuccess, onError: onError);
   }
 
+  static Future<dynamic> detail(BuildContext context, int id) async {
+    return await MyDio(context).get(ServicePath.ACCOUNT_DETAIL + "/$id");
+  }
+
 }

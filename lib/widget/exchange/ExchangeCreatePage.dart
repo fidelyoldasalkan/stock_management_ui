@@ -23,12 +23,12 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
   final _accountController = TextEditingController();
   final _dateController = TextEditingController();
   final _stockController = TextEditingController();
+  final _commissionController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   Exchange exchange = Exchange();
   late BuildContext _buildContext;
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,21 +48,24 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _dateController,
-                      onTap: () => pickDate(context),
-                      decoration: InputDecoration(
-                        labelText: "Tarih Seçin",
-                        prefixIcon: Icon(Icons.date_range_outlined),
-                        border: OutlineInputBorder(),
+                    child: FocusScope(
+                      node: FocusScopeNode(canRequestFocus: false),
+                      child: TextFormField(
+                        controller: _dateController,
+                        onTap: () => pickDate(context),
+                        decoration: InputDecoration(
+                          labelText: "Tarih Seçin",
+                          prefixIcon: Icon(Icons.date_range_outlined),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return "Tarih seçiniz";
+                          }
+                        },
+                        onSaved: (String? value) {
+                        },
                       ),
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return "Tarih seçiniz";
-                        }
-                      },
-                      onSaved: (String? value) {
-                      },
                     ),
                   ),
                   Padding(
@@ -96,6 +99,7 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
                       onSuggestionSelected: (suggestion) {
                         _accountController.text = suggestion!.name!;
                         exchange.accountId = suggestion.id;
+                        _commissionController.text = "${suggestion.commissionRate}";
                       },
                       noItemsFoundBuilder: (context) {
                         return Container(
@@ -187,11 +191,32 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
                       },
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _commissionController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: "Komisyon",
+                        prefixIcon: Icon(Icons.money_outlined),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (String? value) {
+                        if (value!.isEmpty) {
+                          return "Komisyon bilgisini giriniz";
+                        }
+                      },
+                      onSaved: (String? value) {
+                        exchange.commission = double.tryParse(value!)!;
+                      },
+                    ),
+                  ),
                   ButtonBar(
                     alignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        child: Text("Kaydet"),
+                        child: Text("Sat"),
+                        style: ElevatedButton.styleFrom(primary: Colors.redAccent),
                         onPressed: () {
                           if (!_formKey.currentState!.validate()) {
                             print("validate error");
@@ -200,6 +225,22 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
 
                           _formKey.currentState!.save();
 
+                          exchange.exchangeType = 'SELL';
+                          ExchangeService.save(context, exchange.toJson(), onSuccess: onSuccess, onError: onError);
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("Al"),
+                        style: ElevatedButton.styleFrom(primary: Colors.green),
+                        onPressed: () {
+                          if (!_formKey.currentState!.validate()) {
+                            print("validate error");
+                            return;
+                          }
+
+                          _formKey.currentState!.save();
+
+                          exchange.exchangeType = 'BUY';
                           ExchangeService.save(context, exchange.toJson(), onSuccess: onSuccess, onError: onError);
                         },
                       ),

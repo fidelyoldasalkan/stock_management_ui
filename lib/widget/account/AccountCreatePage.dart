@@ -7,17 +7,35 @@ import 'package:stock_management_ui/service/AccountService.dart';
 import 'package:stock_management_ui/service/CorporationService.dart';
 import 'package:stock_management_ui/widget/HomePage.dart';
 
-class AccountCreatePage2 extends StatefulWidget {
+class AccountCreatePage extends StatefulWidget {
+
+  Account? account;
+  String pageTitle;
+
+  AccountCreatePage(this.pageTitle, {this.account});
+
   @override
-  _AccountCreatePage2State createState() => _AccountCreatePage2State();
+  _AccountCreatePageState createState() => _AccountCreatePageState(this.pageTitle, this.account);
 }
 
-class _AccountCreatePage2State extends State<AccountCreatePage2> {
-  final corporationController = TextEditingController();
+class _AccountCreatePageState extends State<AccountCreatePage> {
+  final _corporationController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _commissionController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
   late BuildContext _buildContext;
 
   Account account = Account();
+  String pageTitle;
+
+  _AccountCreatePageState(this.pageTitle, [Account? account]) {
+    if (account != null) {
+      this.account = account;
+      _corporationController.text = account.corporationName!;
+      _nameController.text = account.name!;
+      _commissionController.text = "${account.commissionRate!}";
+    }
+  }
 
   Future<List<Corporation>> getSuggestions(String query) async {
     final corpList = await CorporationService.list(_buildContext);
@@ -41,7 +59,7 @@ class _AccountCreatePage2State extends State<AccountCreatePage2> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Hesap Ekle"),
+        title: Text(this.pageTitle),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -54,6 +72,7 @@ class _AccountCreatePage2State extends State<AccountCreatePage2> {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextFormField(
+                      controller: _nameController,
                       decoration: InputDecoration(
                         labelText: "Hesap Adı",
                         prefixIcon: Icon(Icons.account_circle_outlined),
@@ -84,7 +103,7 @@ class _AccountCreatePage2State extends State<AccountCreatePage2> {
                       },
                       debounceDuration: Duration(milliseconds: 500),
                       textFieldConfiguration: TextFieldConfiguration(
-                        controller: corporationController,
+                        controller: _corporationController,
                         decoration: InputDecoration(
                             labelText: "Kurum Adı",
                             prefixIcon: Icon(Icons.account_balance_outlined),
@@ -98,7 +117,7 @@ class _AccountCreatePage2State extends State<AccountCreatePage2> {
                         );
                       },
                       onSuggestionSelected: (suggestion) {
-                        corporationController.text = suggestion!.name!;
+                        _corporationController.text = suggestion!.name!;
                         account.corporationId = suggestion.id;
                       },
                       noItemsFoundBuilder: (context) {
@@ -114,6 +133,7 @@ class _AccountCreatePage2State extends State<AccountCreatePage2> {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextFormField(
+                      controller: _commissionController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: "Komisyon Oranı",
@@ -133,8 +153,9 @@ class _AccountCreatePage2State extends State<AccountCreatePage2> {
                   SizedBox(
                     height: 50,
                   ),
-                  ElevatedButton(
-                    child: Text("Create"),
+                  ElevatedButton.icon(
+                    icon: Icon(Icons.save_outlined),
+                    label: Text("Kaydet"),
                     onPressed: () {
                       if (!formKey.currentState!.validate()) {
                         print("validate error");

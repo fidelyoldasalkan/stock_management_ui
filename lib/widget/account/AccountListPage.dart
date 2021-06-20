@@ -5,15 +5,16 @@ import 'package:stock_management_ui/model/Account.dart';
 import 'package:stock_management_ui/service/AccountService.dart';
 import 'package:stock_management_ui/widget/abstract/AbstractListPageState.dart';
 
-import 'AccountCreatePage2.dart';
+import 'AccountCreatePage.dart';
+import 'AccountDetailPage.dart';
 
-class AccountListPage3 extends StatefulWidget {
+class AccountListPage extends StatefulWidget {
   @override
-  _AccountListPage3State createState() => _AccountListPage3State();
+  _AccountListPageState createState() => _AccountListPageState();
 }
 
-class _AccountListPage3State extends AbstractListPageState<Account> {
-  _AccountListPage3State() : super("Hesaplarım", "Hesap Ekle");
+class _AccountListPageState extends AbstractListPageState<Account> {
+  _AccountListPageState() : super("Hesaplarım", "Hesap Ekle");
 
   @override
   String apiUri() {
@@ -22,7 +23,7 @@ class _AccountListPage3State extends AbstractListPageState<Account> {
 
   @override
   Widget createPage() {
-    return AccountCreatePage2();
+    return AccountCreatePage("Hesap Ekle");
   }
 
   @override
@@ -47,7 +48,7 @@ class _AccountListPage3State extends AbstractListPageState<Account> {
 
   @override
   void onTapRow(Account data) {
-    // TODO: implement onTapRow
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetailPage(data)));
   }
 
   @override
@@ -78,5 +79,10 @@ class _AccountListPage3State extends AbstractListPageState<Account> {
   Future? delete(int id) async {
     await AccountService.delete(context, id);
     return null;
+  }
+
+  @override
+  void edit(Account data) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountCreatePage("Hesap Düzenle", account: data,)));
   }
 }

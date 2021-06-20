@@ -9,6 +9,7 @@ import 'package:stock_management_ui/model/Stock.dart';
 import 'package:stock_management_ui/service/AccountService.dart';
 import 'package:stock_management_ui/service/DividendService.dart';
 import 'package:stock_management_ui/service/StockService.dart';
+import 'package:stock_management_ui/util/DateUtil.dart';
 
 import '../HomePage.dart';
 
@@ -20,6 +21,7 @@ class DividendCreatePage extends StatefulWidget {
 class _DividendCreatePageState extends State<DividendCreatePage> {
   final accountController = TextEditingController();
   final stockController = TextEditingController();
+  final _dateController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
   late BuildContext _buildContext;
 
@@ -41,6 +43,28 @@ class _DividendCreatePageState extends State<DividendCreatePage> {
               key: formKey,
               child: Column(
                 children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: FocusScope(
+                      node: FocusScopeNode(canRequestFocus: false),
+                      child: TextFormField(
+                        controller: _dateController,
+                        onTap: () => pickDate(context),
+                        decoration: InputDecoration(
+                          labelText: "Tarih Seçin",
+                          prefixIcon: Icon(Icons.date_range_outlined),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return "Tarih seçiniz";
+                          }
+                        },
+                        onSaved: (String? value) {
+                        },
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsets.all(8),
                     child: TypeAheadFormField<Account?>(
@@ -232,4 +256,20 @@ class _DividendCreatePageState extends State<DividendCreatePage> {
   }
 
   void onError(GeneralResponse? generalResponse) {}
+
+  Future pickDate(BuildContext context) async {
+    final initialDate = DateTime.now();
+    final newDate = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: DateTime(initialDate.year - 5),
+        lastDate: DateTime(initialDate.year + 5)
+    );
+
+    if (newDate == null) return;
+    dividend.date = DateUtil.apiDate(newDate);
+    _dateController.text = DateUtil.ddMmYy(newDate);
+
+  }
+
 }

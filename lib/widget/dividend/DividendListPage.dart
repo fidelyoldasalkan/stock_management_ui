@@ -1,19 +1,20 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:stock_management_ui/constant/ServicePath.dart';
 import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/model/Dividend.dart';
+import 'package:stock_management_ui/my_icons_icons.dart';
 import 'package:stock_management_ui/service/DividendService.dart';
 import 'package:stock_management_ui/widget/abstract/AbstractListPageState.dart';
+import 'package:stock_management_ui/widget/dividend/DividendCreatePage.dart';
 
-import 'DividendCreatePage.dart';
 
-class DividendListPage2 extends StatefulWidget {
+class DividendListPage extends StatefulWidget {
   @override
-  _DividendListPage2State createState() => _DividendListPage2State();
+  _DividendListPageState createState() => _DividendListPageState();
 }
 
-class _DividendListPage2State extends AbstractListPageState<Dividend> {
-  _DividendListPage2State() : super("Temettülerim", "Temettü Ekle");
+class _DividendListPageState extends AbstractListPageState<Dividend> {
+  _DividendListPageState() : super("Temettülerim", "Temettü Ekle");
 
   @override
   String apiUri() {
@@ -59,6 +60,7 @@ class _DividendListPage2State extends AbstractListPageState<Dividend> {
   @override
   List<Widget> row(Dividend data) {
     return [
+      Expanded(flex: 1, child: Icon(MyIcons.dividend, color: Colors.green,)),
       Expanded(
         flex: 4,
         child: Padding(
@@ -79,5 +81,10 @@ class _DividendListPage2State extends AbstractListPageState<Dividend> {
         ),
       )
     ];
+  }
+
+  @override
+  void edit(Dividend data) {
+    // TODO: implement edit
   }
 }

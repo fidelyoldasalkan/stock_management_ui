@@ -45,22 +45,24 @@ class _MoneyFlowCreatePageState extends State<MoneyFlowCreatePage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _dateController,
-                      onTap: () => pickDate(context),
-                      decoration: InputDecoration(
-                        labelText: "Tarih Seçin",
-                        prefixIcon: Icon(Icons.date_range_outlined),
-                        border: OutlineInputBorder(),
+                    child: FocusScope(
+                      node: FocusScopeNode(canRequestFocus: false),
+                      child: TextFormField(
+                        controller: _dateController,
+                        onTap: () => pickDate(context),
+                        decoration: InputDecoration(
+                          labelText: "Tarih Seçin",
+                          prefixIcon: Icon(Icons.date_range_outlined),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return "Tarih seçiniz";
+                          }
+                        },
+                        onSaved: (String? value) {
+                        },
                       ),
-                      validator: (String? value) {
-                        if (value!.isEmpty) {
-                          return "Tarih seçiniz";
-                        }
-                      },
-                      onSaved: (String? value) {
-                        moneyFlow.date = value;
-                      },
                     ),
                   ),
                   Padding(
@@ -132,6 +134,7 @@ class _MoneyFlowCreatePageState extends State<MoneyFlowCreatePage> {
                     children: [
                       ElevatedButton(
                         child: Text("Para Çek"),
+                        style: ElevatedButton.styleFrom(primary: Colors.redAccent),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) {
                             print("validate error");
@@ -144,6 +147,7 @@ class _MoneyFlowCreatePageState extends State<MoneyFlowCreatePage> {
                         },
                       ),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: Colors.green),
                         child: Text("Para Yatır"),
                         onPressed: () {
                           if (!formKey.currentState!.validate()) {
