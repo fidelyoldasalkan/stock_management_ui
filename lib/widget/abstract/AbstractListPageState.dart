@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:stock_management_ui/model/Account.dart';
+import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/model/BaseModel.dart';
-import 'package:stock_management_ui/service/AccountService.dart';
-import 'package:stock_management_ui/util/HttpUtil.dart';
+import 'package:stock_management_ui/util/MyDio.dart';
 
 abstract class AbstractListPageState<T extends BaseModel> extends State {
   bool _isFirst = true;
@@ -12,13 +11,15 @@ abstract class AbstractListPageState<T extends BaseModel> extends State {
 
   String title;
 
+  late BuildContext _buildContext;
+
   AbstractListPageState(this.title, this.createButtonTitle);
 
-  Uri apiUri();
+  String apiUri();
 
-  void onSuccess();
+  void onSuccess(GeneralResponse? generalResponse);
 
-  void onError();
+  void onError(GeneralResponse? generalResponse);
 
   T mapper(Map<String, dynamic> json);
 
@@ -33,10 +34,11 @@ abstract class AbstractListPageState<T extends BaseModel> extends State {
   Future? delete(int id);
 
   Future<List<T>> fetchData() async {
-    var jsonData = await HttpUtil.get(apiUri(), onSuccess, onError);
+    final generalResponse = await MyDio(_buildContext).get(apiUri(), onSuccess: onSuccess, onError: onError);
+    // var jsonData = await HttpUtil.get(apiUri(), onSuccess, onError);
 
     List<T> list = [];
-    for (var json in jsonData) {
+    for (var json in generalResponse.data) {
       list.add(mapper(json));
     }
 
@@ -47,6 +49,7 @@ abstract class AbstractListPageState<T extends BaseModel> extends State {
 
   @override
   Widget build(BuildContext context) {
+    _buildContext = context;
     return Scaffold(
       appBar: AppBar(
         title: Text(title),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:stock_management_ui/constant/ServicePath.dart';
+import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/model/Exchange.dart';
 import 'package:stock_management_ui/service/ExchangeService.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 import 'package:stock_management_ui/widget/abstract/AbstractListPageState.dart';
 
 import 'ExchangeCreatePage.dart';
@@ -17,8 +18,8 @@ class _ExchangeListPageState extends AbstractListPageState<Exchange> {
   _ExchangeListPageState() : super("İşlemlerin", "Yeni İşlem");
 
   @override
-  Uri apiUri() {
-    return UrlBuilder.exchangeList();
+  String apiUri() {
+    return ServicePath.EXCHANGE_LIST;
   }
 
   @override
@@ -28,7 +29,7 @@ class _ExchangeListPageState extends AbstractListPageState<Exchange> {
 
   @override
   Future? delete(int id) async {
-    await ExchangeService.delete(id);
+    await ExchangeService.delete(context, id);
     return null;
   }
 
@@ -43,12 +44,12 @@ class _ExchangeListPageState extends AbstractListPageState<Exchange> {
   }
 
   @override
-  void onError() {
+  void onError(GeneralResponse? generalResponse) {
     // TODO: implement onError
   }
 
   @override
-  void onSuccess() {
+  void onSuccess(GeneralResponse? generalResponse) {
     // TODO: implement onSuccess
   }
 

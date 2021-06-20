@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:stock_management_ui/constant/ServicePath.dart';
+import 'package:stock_management_ui/constant/ServiceError.dart';
+import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/request/LoginRequest.dart';
-import 'package:stock_management_ui/util/HttpUtil.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
+import 'package:stock_management_ui/util/MyDio.dart';
+import 'package:stock_management_ui/util/SharedPref.dart';
 import 'package:stock_management_ui/widget/HomePage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,6 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  static SharedPref _sharedPref = SharedPref();
+
   LoginRequest loginRequest = LoginRequest();
   final GlobalKey<FormState> formKey = GlobalKey();
   bool passwordInvisible = true;
@@ -23,11 +28,13 @@ class _LoginPageState extends State<LoginPage> {
       print("A");
       waiting = true;
     });
-    HttpUtil.post(
-        UrlBuilder.login(), loginRequest.toJson(), onSuccess, onError);
+
+    MyDio(context).post(ServicePath.AUTH_LOGIN, loginRequest.toJson(),
+        onSuccess: onSuccess, onError: onError);
   }
 
-  void onSuccess() {
+  void onSuccess(GeneralResponse? generalResponse) {
+    _sharedPref.saveLoginInfo(loginRequest.username, loginRequest.password, generalResponse!.data!);
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => HomePage()), (r) => false);
     setState(() {
@@ -130,5 +137,22 @@ class _LoginPageState extends State<LoginPage> {
           );
   }
 
-  void onError() {}
+  void onError(GeneralResponse? generalResponse) {
+    setState(() {
+      waiting = false;
+    });
+
+    if (generalResponse!.errorCode == ServiceError.BAD_CREDENTIALS)
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Geçersiz Giriş"),
+              content: Text("Kullanıcı adı veya şifre hatalı"),
+              actions: [
+                Text("Tamam"),
+              ],
+            );
+          });
+  }
 }

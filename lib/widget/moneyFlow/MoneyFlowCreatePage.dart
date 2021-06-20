@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/model/Account.dart';
 import 'package:stock_management_ui/model/MoneyFlow.dart';
 import 'package:stock_management_ui/model/enums/MoneyFlowType.dart';
 import 'package:stock_management_ui/service/AccountService.dart';
+import 'package:stock_management_ui/service/MoneyFlowService.dart';
 import 'package:stock_management_ui/util/DateUtil.dart';
-import 'package:stock_management_ui/util/HttpUtil.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 
 import '../HomePage.dart';
 
@@ -179,11 +179,10 @@ class _MoneyFlowCreatePageState extends State<MoneyFlowCreatePage> {
 
   void postData(String moneyFlowType) {
     moneyFlow.moneyFlowType = moneyFlowType == "MoneyFlowType.DEPOSIT" ? "DEPOSIT" : "WITHDRAW" ;
-    HttpUtil.post(
-        UrlBuilder.saveMoneyFlow(), moneyFlow.toJson(), onSuccess, onError);
+    MoneyFlowService.save(context, moneyFlow.toJson(), onSuccess: onSuccess, onError: onError);
   }
 
-  void onSuccess() {
+  void onSuccess(GeneralResponse? generalResponse) {
     showDialog(
         context: _buildContext,
         builder: (context) {
@@ -204,7 +203,7 @@ class _MoneyFlowCreatePageState extends State<MoneyFlowCreatePage> {
         MaterialPageRoute(builder: (context) => HomePage()), (r) => false));
   }
 
-  void onError() {}
+  void onError(GeneralResponse? generalResponse) {}
 
   Future pickDate(BuildContext context) async {
     final initialDate = DateTime.now();

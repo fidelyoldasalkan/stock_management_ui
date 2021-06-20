@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:stock_management_ui/constant/ServicePath.dart';
+import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/model/Dividend.dart';
 import 'package:stock_management_ui/service/DividendService.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 import 'package:stock_management_ui/widget/abstract/AbstractListPageState.dart';
 
 import 'DividendCreatePage.dart';
@@ -15,8 +16,8 @@ class _DividendListPage2State extends AbstractListPageState<Dividend> {
   _DividendListPage2State() : super("Temettülerim", "Temettü Ekle");
 
   @override
-  Uri apiUri() {
-    return UrlBuilder.dividendList();
+  String apiUri() {
+    return ServicePath.DIVIDEND_LIST;
   }
 
   @override
@@ -26,7 +27,7 @@ class _DividendListPage2State extends AbstractListPageState<Dividend> {
 
   @override
   Future? delete(int id) async {
-    await DividendService.delete(id);
+    await DividendService.delete(context, id);
     return null;
   }
 
@@ -41,12 +42,12 @@ class _DividendListPage2State extends AbstractListPageState<Dividend> {
   }
 
   @override
-  void onError() {
+  void onError(GeneralResponse? generalResponse) {
     // TODO: implement onError
   }
 
   @override
-  void onSuccess() {
+  void onSuccess(GeneralResponse? generalResponse) {
     // TODO: implement onSuccess
   }
 

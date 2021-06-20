@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:stock_management_ui/constant/ServicePath.dart';
 import 'package:stock_management_ui/model/Dividend.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 import 'package:stock_management_ui/widget/AbstractCard.dart';
 
 class DividendCard extends AbstractCard<Dividend> {
-  DividendCard() : super("Temettü", UrlBuilder.build("dividend/list"));
+  DividendCard() : super("Temettü", ServicePath.DIVIDEND_LIST);
 
   @override
   Widget leftWidget(Dividend data) {

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:stock_management_ui/constant/ServicePath.dart';
 import 'package:stock_management_ui/model/Account.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 import 'package:stock_management_ui/widget/AbstractCard.dart';
 
 class AccountCard extends AbstractCard<Account> {
-  AccountCard() : super("Hesaplar", UrlBuilder.build("account/list"));
+  AccountCard() : super("Hesaplar", ServicePath.ACCOUNT_LIST);
 
   @override
   Account mapper(json) {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/model/Account.dart';
 import 'package:stock_management_ui/model/Corporation.dart';
+import 'package:stock_management_ui/service/AccountService.dart';
 import 'package:stock_management_ui/service/CorporationService.dart';
-import 'package:stock_management_ui/util/HttpUtil.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 import 'package:stock_management_ui/widget/HomePage.dart';
 
 class AccountCreatePage2 extends StatefulWidget {
@@ -143,7 +143,7 @@ class _AccountCreatePage2State extends State<AccountCreatePage2> {
 
                       formKey.currentState!.save();
 
-                      postData();
+                      AccountService.save(context, account.toJson(), onSuccess: onSuccess, onError: onError);
                     },
                   ),
                 ],
@@ -155,12 +155,7 @@ class _AccountCreatePage2State extends State<AccountCreatePage2> {
     );
   }
 
-  void postData() async {
-    HttpUtil.post(
-        UrlBuilder.accountSave(), account.toJson(), onSuccess, onError);
-  }
-
-  void onSuccess() {
+  void onSuccess(GeneralResponse? generalResponse) {
     showDialog(
             context: _buildContext,
             builder: (context) {
@@ -181,5 +176,5 @@ class _AccountCreatePage2State extends State<AccountCreatePage2> {
             MaterialPageRoute(builder: (context) => HomePage()), (r) => false));
   }
 
-  void onError() {}
+  void onError(GeneralResponse? generalResponse) {}
 }

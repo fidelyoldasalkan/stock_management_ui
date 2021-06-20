@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:stock_management_ui/constant/ServicePath.dart';
+import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/model/Account.dart';
 import 'package:stock_management_ui/service/AccountService.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
-import 'package:stock_management_ui/widget/abstract/AbstractListPage.dart';
 import 'package:stock_management_ui/widget/abstract/AbstractListPageState.dart';
 
 import 'AccountCreatePage2.dart';
@@ -17,8 +16,8 @@ class _AccountListPage3State extends AbstractListPageState<Account> {
   _AccountListPage3State() : super("Hesaplarım", "Hesap Ekle");
 
   @override
-  Uri apiUri() {
-    return UrlBuilder.accountList();
+  String apiUri() {
+    return ServicePath.ACCOUNT_LIST;
   }
 
   @override
@@ -37,12 +36,12 @@ class _AccountListPage3State extends AbstractListPageState<Account> {
   }
 
   @override
-  void onError() {
+  void onError(GeneralResponse? generalResponse) {
     // TODO: implement onError
   }
 
   @override
-  void onSuccess() {
+  void onSuccess(GeneralResponse? generalResponse) {
     // TODO: implement onSuccess
   }
 
@@ -77,7 +76,7 @@ class _AccountListPage3State extends AbstractListPageState<Account> {
 
   @override
   Future? delete(int id) async {
-    await AccountService.delete(id);
+    await AccountService.delete(context, id);
     return null;
   }
 }

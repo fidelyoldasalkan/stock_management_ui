@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/model/Account.dart';
 import 'package:stock_management_ui/model/Exchange.dart';
 import 'package:stock_management_ui/model/Stock.dart';
 import 'package:stock_management_ui/service/AccountService.dart';
+import 'package:stock_management_ui/service/ExchangeService.dart';
 import 'package:stock_management_ui/service/StockService.dart';
 import 'package:stock_management_ui/util/DateUtil.dart';
-import 'package:stock_management_ui/util/HttpUtil.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 
 import '../HomePage.dart';
 
@@ -200,7 +200,7 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
 
                           _formKey.currentState!.save();
 
-                          postData();
+                          ExchangeService.save(context, exchange.toJson(), onSuccess: onSuccess, onError: onError);
                         },
                       ),
                     ],
@@ -248,12 +248,7 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
     }).toList();
   }
 
-  void postData() {
-    HttpUtil.post(
-        UrlBuilder.exchangeSave(), exchange.toJson(), onSuccess, onError);
-  }
-
-  void onSuccess() {
+  void onSuccess(GeneralResponse? generalResponse) {
     showDialog(
         context: _buildContext,
         builder: (context) {
@@ -274,5 +269,5 @@ class _ExchangeCreatePageState extends State<ExchangeCreatePage> {
         MaterialPageRoute(builder: (context) => HomePage()), (r) => false));
   }
 
-  void onError() {}
+  void onError(GeneralResponse? generalResponse) {}
 }

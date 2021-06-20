@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stock_management_ui/util/MyDio.dart';
-import 'package:stock_management_ui/widget/account/AccountDetailPage.dart';
-import 'package:stock_management_ui/widget/account/AccountListPage.dart';
-import 'package:stock_management_ui/widget/account/AccountListPage2.dart';
 import 'package:stock_management_ui/widget/account/AccountListPage3.dart';
-import 'package:stock_management_ui/widget/dividend/DividendListPage.dart';
 import 'package:stock_management_ui/widget/dividend/DividendListPage2.dart';
+import 'package:stock_management_ui/widget/moneyFlow/MoneyFlowListPage2.dart';
 import 'package:stock_management_ui/widget/exchange/ExchangeListPage.dart';
-import 'package:stock_management_ui/widget/moneyFlow/MoneyFlowListPage.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -39,7 +35,7 @@ class MyDrawer extends StatelessWidget {
             leading: Icon(Icons.attach_money_rounded),
             title: Text('Nakit Akışı'),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MoneyFlowListPage("Nakit Akışlarım", "Nakit Akışı Ekle")));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MoneyFlowListPage2()));
             },
           ),
           ListTile(

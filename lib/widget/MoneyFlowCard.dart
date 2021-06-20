@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:stock_management_ui/constant/ServicePath.dart';
 import 'package:stock_management_ui/model/MoneyFlow.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 import 'package:stock_management_ui/widget/AbstractCard.dart';
 
 class MoneyFlowCard extends AbstractCard<MoneyFlow> {
-  MoneyFlowCard() : super('Nakit Akışı', UrlBuilder.build("money-flow/list"));
+  MoneyFlowCard() : super('Nakit Akışı', ServicePath.MONEY_FLOW_LIST);
 
   @override
   MoneyFlow mapper(json) {

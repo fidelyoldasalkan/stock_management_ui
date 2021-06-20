@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:stock_management_ui/constant/ServicePath.dart';
 import 'package:stock_management_ui/model/Exchange.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 import 'package:stock_management_ui/widget/AbstractCard.dart';
 
 class ExchangeCard extends AbstractCard<Exchange> {
-  ExchangeCard() : super("İşlemler", UrlBuilder.build("exchange/list"));
+  ExchangeCard() : super("İşlemler", ServicePath.EXCHANGE_LIST);
 
   @override
   Exchange mapper(json) {
@@ -37,6 +37,6 @@ class ExchangeCard extends AbstractCard<Exchange> {
 
   @override
   Widget noFoundDataWidget() {
-   return Text("Menkul kıymet alım satım işleminiz bulunmamaktadır.");
+    return Text("Menkul kıymet alım satım işleminiz bulunmamaktadır.");
   }
 }

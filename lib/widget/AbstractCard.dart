@@ -1,38 +1,26 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:stock_management_ui/model/BaseModel.dart';
-import 'package:stock_management_ui/util/HttpUtil.dart';
+import 'package:stock_management_ui/util/MyDio.dart';
 
 abstract class AbstractCard<T extends BaseModel> extends StatelessWidget {
   final String title;
   final String url;
   bool isFirst = false;
+  late BuildContext _buildContext;
 
   AbstractCard(this.title, this.url);
 
   Future<List<T>> fetchData() async {
-    var jsonData = await HttpUtil.get(Uri.parse(url), () { }, () { });
-    // final response = await http.get(Uri.parse(url));
+    final generalResponse = await MyDio(_buildContext).get(url);
 
+    List<T> list = [];
+    for (var json in generalResponse.data!) {
+      list.add(mapper(json));
+    }
 
-    // if (response.statusCode == 200) {
-    //    var jsonData = json.decode(response.body);
+    isFirst = list.isEmpty;
 
-      List<T> list = [];
-      for (var json in jsonData!) {
-        list.add(mapper(json));
-      }
-
-      isFirst = list.isEmpty;
-
-      print("$url fetched. size : ${list.length}");
-      return list;
-    // } else {
-    //   print("$url api has error");
-    //   throw Exception("ERROR");
-    // }
+    return list;
   }
 
   T mapper(dynamic json);
@@ -47,6 +35,7 @@ abstract class AbstractCard<T extends BaseModel> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _buildContext = context;
     return Container(
       margin: EdgeInsets.all(5),
       padding: EdgeInsets.all(2),

@@ -35,5 +35,14 @@ class ServicePath {
   // ignore: non_constant_identifier_names
   static final String STOCK_LIST = "/stock/listAll";
 
+  // ignore: non_constant_identifier_names
+  static final String EXCHANGE_LIST = "/exchange/list";
+
+  // ignore: non_constant_identifier_names
+  static final String EXCHANGE_SAVE = "/exchange/save";
+
+  // ignore: non_constant_identifier_names
+  static final String EXCHANGE_DELETE = "/exchange/delete";
+
 
 }

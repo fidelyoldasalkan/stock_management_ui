@@ -25,6 +25,18 @@ class MyInterceptor extends Interceptor {
 
   @override
   Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
+    if (err.type == DioErrorType.connectTimeout) {
+      showDialog(context: buildContext, builder: (context) {
+        return AlertDialog(
+          title: Text("Bağlantı Hatası"),
+          content: Text("Bağlantı zaman aşımına uğradı. Lütfendaha sonra tekrar deneyiniz."),
+        );
+      });
+
+      super.onError(err, handler);
+      return;
+    }
+
     if (err.response!.statusCode == HttpStatus.forbidden) {
       var username = await _sharedPref.loadUsername();
       var password = await _sharedPref.loadPassword();

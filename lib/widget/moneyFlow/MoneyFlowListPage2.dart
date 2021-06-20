@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:stock_management_ui/constant/ServicePath.dart';
+import 'package:stock_management_ui/dto/GeneralResponse.dart';
 import 'package:stock_management_ui/model/MoneyFlow.dart';
 import 'package:stock_management_ui/service/MoneyFlowService.dart';
 import 'package:stock_management_ui/util/DateUtil.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 import 'package:stock_management_ui/widget/abstract/AbstractListPageState.dart';
 
 import 'MoneyFlowCreatePage.dart';
 
-class MoneyFlowListPage extends StatefulWidget {
-  const MoneyFlowListPage({Key? key}) : super(key: key);
+class MoneyFlowListPage2 extends StatefulWidget {
+  const MoneyFlowListPage2({Key? key}) : super(key: key);
 
   @override
   _MoneyFlowListPageState createState() => _MoneyFlowListPageState();
@@ -19,8 +20,8 @@ class _MoneyFlowListPageState extends AbstractListPageState<MoneyFlow> {
   _MoneyFlowListPageState() : super("Nakit Akışı", "Nakit Akışı Ekle");
 
   @override
-  Uri apiUri() {
-    return UrlBuilder.moneyFlowList();
+  String apiUri() {
+    return ServicePath.MONEY_FLOW_LIST;
   }
 
   @override
@@ -30,7 +31,7 @@ class _MoneyFlowListPageState extends AbstractListPageState<MoneyFlow> {
 
   @override
   Future? delete(int id) async {
-    await MoneyFlowService.delete(id);
+    await MoneyFlowService.delete(context, id);
     return null;
   }
 
@@ -45,12 +46,12 @@ class _MoneyFlowListPageState extends AbstractListPageState<MoneyFlow> {
   }
 
   @override
-  void onError() {
+  void onError(GeneralResponse? generalResponse) {
     // TODO: implement onError
   }
 
   @override
-  void onSuccess() {
+  void onSuccess(GeneralResponse? generalResponse) {
     // TODO: implement onSuccess
   }
 

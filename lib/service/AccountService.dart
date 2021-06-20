@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:stock_management_ui/constant/ServicePath.dart';
 import 'package:stock_management_ui/model/Account.dart';
-import 'package:stock_management_ui/util/HttpUtil.dart';
 import 'package:stock_management_ui/util/MyDio.dart';
-import 'package:stock_management_ui/util/UrlBuilder.dart';
 
 class AccountService {
 
@@ -18,7 +16,12 @@ class AccountService {
     return list;
   }
 
-  static Future<dynamic> delete(int id) async {
-    await HttpUtil.delete(UrlBuilder.accountDelete(id), () { }, () { });
+  static Future<dynamic> delete(BuildContext buildContext, int id) async {
+    return await MyDio(buildContext).delete(ServicePath.ACCOUNT_DELETE, id);
   }
+
+  static Future<dynamic> save(BuildContext buildContext, dynamic data, {Function? onSuccess, Function? onError}) async {
+    return await MyDio(buildContext).post(ServicePath.ACCOUNT_SAVE, data, onSuccess: onSuccess, onError: onError);
+  }
+
 }
